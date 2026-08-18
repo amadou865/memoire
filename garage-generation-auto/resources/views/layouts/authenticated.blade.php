@@ -24,6 +24,7 @@
     @include('partials.navbar-auth')
 
     {{-- Contenu principal --}}
+    <x-toast />
     <main class="flex-grow">
         @yield('content')
     </main>

@@ -25,16 +25,24 @@
                 {{-- MENU CLIENT --}}
                 {{-- ═══════════════════════════════════════════ --}}
                 @if(auth()->user()->isClient())
-                    <a href="#" class="text-white hover:bg-primary-light px-4 py-2 rounded-lg font-medium transition-all duration-200 text-sm">
+                    <a href="{{ route('client.dashboard') }}"
+                       class="{{ request()->routeIs('client.dashboard') ? 'bg-accent text-white' : 'text-white hover:bg-primary-light' }} px-4 py-2 rounded-lg font-medium transition-all duration-200 text-sm">
+                        Tableau de bord
+                    </a>
+                    <a href="{{ route('client.rendez-vous.index') }}"
+                       class="{{ request()->routeIs('client.rendez-vous.*') ? 'bg-accent text-white' : 'text-white hover:bg-primary-light' }} px-4 py-2 rounded-lg font-medium transition-all duration-200 text-sm">
                         Mes Rendez-vous
                     </a>
-                    <a href="#" class="text-white hover:bg-primary-light px-4 py-2 rounded-lg font-medium transition-all duration-200 text-sm">
+                    <a href="{{ route('client.vehicules.index') }}"
+                       class="{{ request()->routeIs('client.vehicules.*') ? 'bg-accent text-white' : 'text-white hover:bg-primary-light' }} px-4 py-2 rounded-lg font-medium transition-all duration-200 text-sm">
                         Mes Véhicules
                     </a>
-                    <a href="#" class="text-white hover:bg-primary-light px-4 py-2 rounded-lg font-medium transition-all duration-200 text-sm">
+                    <a href="{{ route('client.interventions.index') }}"
+                       class="{{ request()->routeIs('client.interventions.*') ? 'bg-accent text-white' : 'text-white hover:bg-primary-light' }} px-4 py-2 rounded-lg font-medium transition-all duration-200 text-sm">
                         Historique
                     </a>
-                    <a href="#" class="text-white hover:bg-primary-light px-4 py-2 rounded-lg font-medium transition-all duration-200 text-sm">
+                    <a href="{{ route('client.factures.index') }}"
+                       class="{{ request()->routeIs('client.factures.*') ? 'bg-accent text-white' : 'text-white hover:bg-primary-light' }} px-4 py-2 rounded-lg font-medium transition-all duration-200 text-sm">
                         Mes Factures
                     </a>
                 @endif
@@ -43,10 +51,15 @@
                 {{-- MENU RÉCEPTIONNISTE --}}
                 {{-- ═══════════════════════════════════════════ --}}
                 @if(auth()->user()->isReceptionniste())
+                    <a href="{{ route('receptionniste.dashboard') }}"
+                       class="{{ request()->routeIs('receptionniste.dashboard') ? 'bg-accent text-white' : 'text-white hover:bg-primary-light' }} px-4 py-2 rounded-lg font-medium transition-all duration-200 text-sm">
+                        Tableau de bord
+                    </a>
                     <a href="#" class="text-white hover:bg-primary-light px-4 py-2 rounded-lg font-medium transition-all duration-200 text-sm">
                         Rendez-vous
                     </a>
-                    <a href="#" class="text-white hover:bg-primary-light px-4 py-2 rounded-lg font-medium transition-all duration-200 text-sm">
+                    <a href="{{ route('receptionniste.clients.index') }}"
+                       class="{{ request()->routeIs('receptionniste.clients.*') ? 'bg-accent text-white' : 'text-white hover:bg-primary-light' }} px-4 py-2 rounded-lg font-medium transition-all duration-200 text-sm">
                         Clients
                     </a>
                     <a href="#" class="text-white hover:bg-primary-light px-4 py-2 rounded-lg font-medium transition-all duration-200 text-sm">
@@ -64,6 +77,10 @@
                 {{-- MENU CHEF DE DÉPARTEMENT --}}
                 {{-- ═══════════════════════════════════════════ --}}
                 @if(auth()->user()->isChefDepartement())
+                    <a href="{{ route('chef.dashboard') }}"
+                       class="{{ request()->routeIs('chef.dashboard') ? 'bg-accent text-white' : 'text-white hover:bg-primary-light' }} px-4 py-2 rounded-lg font-medium transition-all duration-200 text-sm">
+                        Tableau de bord
+                    </a>
                     <a href="#" class="text-white hover:bg-primary-light px-4 py-2 rounded-lg font-medium transition-all duration-200 text-sm">
                         Mes Interventions
                     </a>
@@ -82,6 +99,10 @@
                 {{-- MENU DIRECTEUR TECHNIQUE --}}
                 {{-- ═══════════════════════════════════════════ --}}
                 @if(auth()->user()->isDirecteurTechnique())
+                    <a href="{{ route('directeur.dashboard') }}"
+                       class="{{ request()->routeIs('directeur.dashboard') ? 'bg-accent text-white' : 'text-white hover:bg-primary-light' }} px-4 py-2 rounded-lg font-medium transition-all duration-200 text-sm">
+                        Tableau de bord
+                    </a>
                     <a href="#" class="text-white hover:bg-primary-light px-4 py-2 rounded-lg font-medium transition-all duration-200 text-sm">
                         Contrôle Qualité
                     </a>
@@ -100,6 +121,10 @@
                 {{-- MENU ADMINISTRATEUR --}}
                 {{-- ═══════════════════════════════════════════ --}}
                 @if(auth()->user()->isAdministrateur())
+                    <a href="{{ route('admin.dashboard') }}"
+                       class="{{ request()->routeIs('admin.dashboard') ? 'bg-accent text-white' : 'text-white hover:bg-primary-light' }} px-4 py-2 rounded-lg font-medium transition-all duration-200 text-sm">
+                        Tableau de bord
+                    </a>
                     <a href="#" class="text-white hover:bg-primary-light px-4 py-2 rounded-lg font-medium transition-all duration-200 text-sm">
                         Utilisateurs
                     </a>
@@ -182,7 +207,9 @@
 
         </div>
 
-        {{-- Menu Mobile --}}
+        {{-- ═══════════════════════════════════════════ --}}
+        {{-- MENU MOBILE --}}
+        {{-- ═══════════════════════════════════════════ --}}
         <div id="mobile-menu-auth" class="hidden lg:hidden pb-4 space-y-1 border-t border-primary-light pt-4">
 
             {{-- Info utilisateur --}}
@@ -203,21 +230,24 @@
 
             {{-- Liens mobiles selon le rôle --}}
             @if(auth()->user()->isClient())
-                <a href="#" class="block text-white hover:bg-primary-light px-4 py-2 rounded-lg">Mes Rendez-vous</a>
-                <a href="#" class="block text-white hover:bg-primary-light px-4 py-2 rounded-lg">Mes Véhicules</a>
-                <a href="#" class="block text-white hover:bg-primary-light px-4 py-2 rounded-lg">Historique</a>
-                <a href="#" class="block text-white hover:bg-primary-light px-4 py-2 rounded-lg">Mes Factures</a>
+                <a href="{{ route('client.dashboard') }}" class="block text-white hover:bg-primary-light px-4 py-2 rounded-lg">Tableau de bord</a>
+                <a href="{{ route('client.rendez-vous.index') }}" class="block text-white hover:bg-primary-light px-4 py-2 rounded-lg">Mes Rendez-vous</a>
+                <a href="{{ route('client.vehicules.index') }}" class="block text-white hover:bg-primary-light px-4 py-2 rounded-lg">Mes Véhicules</a>
+                <a href="{{ route('client.interventions.index') }}" class="block text-white hover:bg-primary-light px-4 py-2 rounded-lg">Historique</a>
+                <a href="{{ route('client.factures.index') }}" class="block text-white hover:bg-primary-light px-4 py-2 rounded-lg">Mes Factures</a>
             @endif
 
             @if(auth()->user()->isReceptionniste())
+                <a href="{{ route('receptionniste.dashboard') }}" class="block text-white hover:bg-primary-light px-4 py-2 rounded-lg">Tableau de bord</a>
                 <a href="#" class="block text-white hover:bg-primary-light px-4 py-2 rounded-lg">Rendez-vous</a>
-                <a href="#" class="block text-white hover:bg-primary-light px-4 py-2 rounded-lg">Clients</a>
+                <a href="{{ route('receptionniste.clients.index') }}" class="block text-white hover:bg-primary-light px-4 py-2 rounded-lg">Clients</a>
                 <a href="#" class="block text-white hover:bg-primary-light px-4 py-2 rounded-lg">Interventions</a>
                 <a href="#" class="block text-white hover:bg-primary-light px-4 py-2 rounded-lg">Devis</a>
                 <a href="#" class="block text-white hover:bg-primary-light px-4 py-2 rounded-lg">Factures</a>
             @endif
 
             @if(auth()->user()->isChefDepartement())
+                <a href="{{ route('chef.dashboard') }}" class="block text-white hover:bg-primary-light px-4 py-2 rounded-lg">Tableau de bord</a>
                 <a href="#" class="block text-white hover:bg-primary-light px-4 py-2 rounded-lg">Mes Interventions</a>
                 <a href="#" class="block text-white hover:bg-primary-light px-4 py-2 rounded-lg">Diagnostics</a>
                 <a href="#" class="block text-white hover:bg-primary-light px-4 py-2 rounded-lg">Pièces Détachées</a>
@@ -225,6 +255,7 @@
             @endif
 
             @if(auth()->user()->isDirecteurTechnique())
+                <a href="{{ route('directeur.dashboard') }}" class="block text-white hover:bg-primary-light px-4 py-2 rounded-lg">Tableau de bord</a>
                 <a href="#" class="block text-white hover:bg-primary-light px-4 py-2 rounded-lg">Contrôle Qualité</a>
                 <a href="#" class="block text-white hover:bg-primary-light px-4 py-2 rounded-lg">Essais</a>
                 <a href="#" class="block text-white hover:bg-primary-light px-4 py-2 rounded-lg">Validations</a>
@@ -232,6 +263,7 @@
             @endif
 
             @if(auth()->user()->isAdministrateur())
+                <a href="{{ route('admin.dashboard') }}" class="block text-white hover:bg-primary-light px-4 py-2 rounded-lg">Tableau de bord</a>
                 <a href="#" class="block text-white hover:bg-primary-light px-4 py-2 rounded-lg">Utilisateurs</a>
                 <a href="#" class="block text-white hover:bg-primary-light px-4 py-2 rounded-lg">Stock</a>
                 <a href="#" class="block text-white hover:bg-primary-light px-4 py-2 rounded-lg">Statistiques</a>
