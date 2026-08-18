@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Import de la police Inter depuis Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+/* Styles personnalisés */
+@layer base {
+    body {
+        font-family: 'Inter', system-ui, sans-serif;
+        @apply bg-gray-50 text-primary;
+    }
+}
+
+@layer components {
+    /* Bouton principal orange */
+    .btn-primary {
+        @apply bg-accent hover:bg-accent-600 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 inline-flex items-center gap-2;
+    }
+
+    /* Bouton secondaire outline */
+    .btn-secondary {
+        @apply border-2 border-gray-200 hover:border-primary text-primary font-semibold py-3 px-6 rounded-lg transition-all duration-200 inline-flex items-center gap-2;
+    }
+
+    /* Bouton bleu marine */
+    .btn-dark {
+        @apply bg-primary hover:bg-primary-light text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 inline-flex items-center gap-2;
+    }
+
+    /* Carte standard */
+    .card {
+        @apply bg-white rounded-xl shadow-sm border border-gray-100 p-6;
+    }
+
+    /* Badge de statut */
+    .badge {
+        @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+    }
+}
