@@ -25,10 +25,11 @@ return new class extends Migration
             $table->decimal('montant_valise', 10, 2)->default(0);
 
             $table->enum('statut', [
-                'en attente',
-                'validé',
-                'refuse',
-            ])->default('en attente');
+                'brouillon',
+                'valide',
+                'facture',
+                'annule',
+            ])->default('brouillon');
 
             $table->timestamps();
         });

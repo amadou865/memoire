@@ -55,21 +55,25 @@
                        class="{{ request()->routeIs('receptionniste.dashboard') ? 'bg-accent text-white' : 'text-white hover:bg-primary-light' }} px-4 py-2 rounded-lg font-medium transition-all duration-200 text-sm">
                         Tableau de bord
                     </a>
-                    <a href="#" class="text-white hover:bg-primary-light px-4 py-2 rounded-lg font-medium transition-all duration-200 text-sm">
+                    <a href="{{ route('receptionniste.rendez-vous.index') }}"
+                       class="{{ request()->routeIs('receptionniste.rendez-vous.*') ? 'bg-accent text-white' : 'text-white hover:bg-primary-light' }} px-4 py-2 rounded-lg font-medium transition-all duration-200 text-sm">
                         Rendez-vous
                     </a>
                     <a href="{{ route('receptionniste.clients.index') }}"
                        class="{{ request()->routeIs('receptionniste.clients.*') ? 'bg-accent text-white' : 'text-white hover:bg-primary-light' }} px-4 py-2 rounded-lg font-medium transition-all duration-200 text-sm">
                         Clients
                     </a>
-                    <a href="#" class="text-white hover:bg-primary-light px-4 py-2 rounded-lg font-medium transition-all duration-200 text-sm">
+                    <a href="{{ route('receptionniste.interventions.index') }}"
+                       class="{{ request()->routeIs('receptionniste.interventions.*') ? 'bg-accent text-white' : 'text-white hover:bg-primary-light' }} px-4 py-2 rounded-lg font-medium transition-all duration-200 text-sm">
                         Interventions
                     </a>
-                    <a href="#" class="text-white hover:bg-primary-light px-4 py-2 rounded-lg font-medium transition-all duration-200 text-sm">
-                        Devis
+                    <a href="{{ route('receptionniste.devis.index') }}"
+                        class="{{ request()->routeIs('receptionniste.devis.*') ? 'bg-accent text-white' : 'text-white hover:bg-primary-light' }} px-4 py-2 rounded-lg font-medium transition-all duration-200 text-sm">
+                         Devis
                     </a>
-                    <a href="#" class="text-white hover:bg-primary-light px-4 py-2 rounded-lg font-medium transition-all duration-200 text-sm">
-                        Factures
+                    <a href="{{ route('receptionniste.factures.index') }}"
+                        class="{{ request()->routeIs('receptionniste.factures.*') ? 'bg-accent text-white' : 'text-white hover:bg-primary-light' }} px-4 py-2 rounded-lg font-medium transition-all duration-200 text-sm">
+                         Factures
                     </a>
                 @endif
 
@@ -239,11 +243,11 @@
 
             @if(auth()->user()->isReceptionniste())
                 <a href="{{ route('receptionniste.dashboard') }}" class="block text-white hover:bg-primary-light px-4 py-2 rounded-lg">Tableau de bord</a>
-                <a href="#" class="block text-white hover:bg-primary-light px-4 py-2 rounded-lg">Rendez-vous</a>
+                <a href="{{ route('receptionniste.rendez-vous.index') }}" class="block text-white hover:bg-primary-light px-4 py-2 rounded-lg">Rendez-vous</a>
                 <a href="{{ route('receptionniste.clients.index') }}" class="block text-white hover:bg-primary-light px-4 py-2 rounded-lg">Clients</a>
-                <a href="#" class="block text-white hover:bg-primary-light px-4 py-2 rounded-lg">Interventions</a>
-                <a href="#" class="block text-white hover:bg-primary-light px-4 py-2 rounded-lg">Devis</a>
-                <a href="#" class="block text-white hover:bg-primary-light px-4 py-2 rounded-lg">Factures</a>
+                <a href="{{ route('receptionniste.interventions.index') }}" class="block text-white hover:bg-primary-light px-4 py-2 rounded-lg">Interventions</a>
+                <a href="{{ route('receptionniste.devis.index') }}" class="block text-white hover:bg-primary-light px-4 py-2 rounded-lg">Devis</a>
+                <a href="{{ route('receptionniste.factures.index') }}" class="block text-white hover:bg-primary-light px-4 py-2 rounded-lg">Factures</a>>
             @endif
 
             @if(auth()->user()->isChefDepartement())

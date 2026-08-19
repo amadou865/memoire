@@ -76,8 +76,27 @@ Route::middleware(['auth'])->group(function () {
 
     // Clients
     Route::resource('clients', \App\Http\Controllers\Receptionniste\ClientController::class);
-    });
 
+    // Rendez-vous
+    Route::resource('rendez-vous', \App\Http\Controllers\Receptionniste\RendezVousController::class);
+    Route::patch('/rendez-vous/{rendezVou}/valider', [\App\Http\Controllers\Receptionniste\RendezVousController::class, 'valider'])->name('rendez-vous.valider');
+    Route::patch('/rendez-vous/{rendezVou}/refuser', [\App\Http\Controllers\Receptionniste\RendezVousController::class, 'refuser'])->name('rendez-vous.refuser');
+
+    // Interventions
+    Route::resource('interventions', \App\Http\Controllers\Receptionniste\InterventionController::class);
+    Route::patch('/interventions/{intervention}/statut', [\App\Http\Controllers\Receptionniste\InterventionController::class, 'changerStatut'])->name('interventions.statut');
+
+    // Devis
+    Route::resource('devis', \App\Http\Controllers\Receptionniste\DevisController::class)->parameters(['devis' => 'devi']);
+    Route::patch('/devis/{devi}/valider', [\App\Http\Controllers\Receptionniste\DevisController::class, 'valider'])->name('devis.valider');
+
+    // Factures
+    Route::get('/factures', [\App\Http\Controllers\Receptionniste\FactureController::class, 'index'])->name('factures.index');
+    Route::get('/factures/{facture}', [\App\Http\Controllers\Receptionniste\FactureController::class, 'show'])->name('factures.show');
+    Route::delete('/factures/{facture}', [\App\Http\Controllers\Receptionniste\FactureController::class, 'destroy'])->name('factures.destroy');
+    Route::post('/devis/{devi}/generer-facture', [\App\Http\Controllers\Receptionniste\FactureController::class, 'genererDepuisDevis'])->name('factures.generer');
+    Route::patch('/factures/{facture}/paiement', [\App\Http\Controllers\Receptionniste\FactureController::class, 'enregistrerPaiement'])->name('factures.paiement');
+    });
     // ─────────────────────────────────────────
     // ESPACE CHEF DÉPARTEMENT (à venir)
     // ─────────────────────────────────────────

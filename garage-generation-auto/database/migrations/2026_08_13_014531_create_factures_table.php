@@ -22,6 +22,7 @@ return new class extends Migration
             $table->enum('statut', [
                 'en_attente',
                 'payee',
+                'annulee',
             ])->default('en_attente');
 
             $table->string('mode_payement')->nullable();
