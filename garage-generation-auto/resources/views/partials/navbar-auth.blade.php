@@ -82,19 +82,15 @@
                 {{-- ═══════════════════════════════════════════ --}}
                 @if(auth()->user()->isChefDepartement())
                     <a href="{{ route('chef.dashboard') }}"
-                       class="{{ request()->routeIs('chef.dashboard') ? 'bg-accent text-white' : 'text-white hover:bg-primary-light' }} px-4 py-2 rounded-lg font-medium transition-all duration-200 text-sm">
+                    class="{{ request()->routeIs('chef.dashboard') ? 'bg-accent text-white' : 'text-white hover:bg-primary-light' }} px-4 py-2 rounded-lg font-medium transition-all duration-200 text-sm">
                         Tableau de bord
                     </a>
-                    <a href="#" class="text-white hover:bg-primary-light px-4 py-2 rounded-lg font-medium transition-all duration-200 text-sm">
+                    <a href="{{ route('chef.interventions.index') }}"
+                    class="{{ request()->routeIs('chef.interventions.*') ? 'bg-accent text-white' : 'text-white hover:bg-primary-light' }} px-4 py-2 rounded-lg font-medium transition-all duration-200 text-sm">
                         Mes Interventions
                     </a>
-                    <a href="#" class="text-white hover:bg-primary-light px-4 py-2 rounded-lg font-medium transition-all duration-200 text-sm">
-                        Diagnostics
-                    </a>
-                    <a href="#" class="text-white hover:bg-primary-light px-4 py-2 rounded-lg font-medium transition-all duration-200 text-sm">
-                        Pièces Détachées
-                    </a>
-                    <a href="#" class="text-white hover:bg-primary-light px-4 py-2 rounded-lg font-medium transition-all duration-200 text-sm">
+                    <a href="{{ route('chef.stock') }}"
+                    class="{{ request()->routeIs('chef.stock') ? 'bg-accent text-white' : 'text-white hover:bg-primary-light' }} px-4 py-2 rounded-lg font-medium transition-all duration-200 text-sm">
                         Stock
                     </a>
                 @endif
@@ -252,10 +248,8 @@
 
             @if(auth()->user()->isChefDepartement())
                 <a href="{{ route('chef.dashboard') }}" class="block text-white hover:bg-primary-light px-4 py-2 rounded-lg">Tableau de bord</a>
-                <a href="#" class="block text-white hover:bg-primary-light px-4 py-2 rounded-lg">Mes Interventions</a>
-                <a href="#" class="block text-white hover:bg-primary-light px-4 py-2 rounded-lg">Diagnostics</a>
-                <a href="#" class="block text-white hover:bg-primary-light px-4 py-2 rounded-lg">Pièces Détachées</a>
-                <a href="#" class="block text-white hover:bg-primary-light px-4 py-2 rounded-lg">Stock</a>
+                <a href="{{ route('chef.interventions.index') }}" class="block text-white hover:bg-primary-light px-4 py-2 rounded-lg">Mes Interventions</a>
+                <a href="{{ route('chef.stock') }}" class="block text-white hover:bg-primary-light px-4 py-2 rounded-lg">Stock</a>
             @endif
 
             @if(auth()->user()->isDirecteurTechnique())

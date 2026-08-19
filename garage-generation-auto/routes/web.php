@@ -98,11 +98,27 @@ Route::middleware(['auth'])->group(function () {
     Route::patch('/factures/{facture}/paiement', [\App\Http\Controllers\Receptionniste\FactureController::class, 'enregistrerPaiement'])->name('factures.paiement');
     });
     // ─────────────────────────────────────────
-    // ESPACE CHEF DÉPARTEMENT (à venir)
+    // ESPACE CHEF DE DÉPARTEMENT
     // ─────────────────────────────────────────
-    Route::get('/chef/dashboard', function () {
-        return view('chef.dashboard');
-    })->name('chef.dashboard');
+    Route::middleware(['chef'])->prefix('chef')->name('chef.')->group(function () {
+    Route::get('/dashboard', [\App\Http\Controllers\Chef\DashboardController::class, 'index'])->name('dashboard');
+
+    // Interventions
+    Route::get('/interventions', [\App\Http\Controllers\Chef\InterventionController::class, 'index'])->name('interventions.index');
+    Route::get('/interventions/{intervention}', [\App\Http\Controllers\Chef\InterventionController::class, 'show'])->name('interventions.show');
+    Route::patch('/interventions/{intervention}/statut', [\App\Http\Controllers\Chef\InterventionController::class, 'changerStatut'])->name('interventions.statut');
+
+    // Diagnostics
+    Route::get('/interventions/{intervention}/diagnostic', [\App\Http\Controllers\Chef\DiagnosticController::class, 'create'])->name('diagnostics.create');
+    Route::post('/interventions/{intervention}/diagnostic', [\App\Http\Controllers\Chef\DiagnosticController::class, 'store'])->name('diagnostics.store');
+    Route::delete('/diagnostics/{diagnostic}', [\App\Http\Controllers\Chef\DiagnosticController::class, 'destroy'])->name('diagnostics.destroy');
+
+    // Pièces
+    Route::get('/stock', [\App\Http\Controllers\Chef\PieceController::class, 'stock'])->name('stock');
+    Route::get('/interventions/{intervention}/pieces/ajouter', [\App\Http\Controllers\Chef\PieceController::class, 'ajouterPiece'])->name('pieces.ajouter');
+    Route::post('/interventions/{intervention}/pieces', [\App\Http\Controllers\Chef\PieceController::class, 'storePiece'])->name('pieces.store');
+    Route::delete('/lignes-pieces/{lignePiece}', [\App\Http\Controllers\Chef\PieceController::class, 'supprimerPiece'])->name('pieces.destroy');
+    });
 
     // ─────────────────────────────────────────
     // ESPACE DIRECTEUR TECHNIQUE (à venir)
