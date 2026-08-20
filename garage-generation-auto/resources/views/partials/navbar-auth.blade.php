@@ -100,22 +100,19 @@
                 {{-- ═══════════════════════════════════════════ --}}
                 @if(auth()->user()->isDirecteurTechnique())
                     <a href="{{ route('directeur.dashboard') }}"
-                       class="{{ request()->routeIs('directeur.dashboard') ? 'bg-accent text-white' : 'text-white hover:bg-primary-light' }} px-4 py-2 rounded-lg font-medium transition-all duration-200 text-sm">
+                    class="{{ request()->routeIs('directeur.dashboard') ? 'bg-accent text-white' : 'text-white hover:bg-primary-light' }} px-4 py-2 rounded-lg font-medium transition-all duration-200 text-sm">
                         Tableau de bord
                     </a>
-                    <a href="#" class="text-white hover:bg-primary-light px-4 py-2 rounded-lg font-medium transition-all duration-200 text-sm">
+                    <a href="{{ route('directeur.controle-qualite.index') }}"
+                    class="{{ request()->routeIs('directeur.controle-qualite.*') ? 'bg-accent text-white' : 'text-white hover:bg-primary-light' }} px-4 py-2 rounded-lg font-medium transition-all duration-200 text-sm">
                         Contrôle Qualité
                     </a>
-                    <a href="#" class="text-white hover:bg-primary-light px-4 py-2 rounded-lg font-medium transition-all duration-200 text-sm">
-                        Essais
-                    </a>
-                    <a href="#" class="text-white hover:bg-primary-light px-4 py-2 rounded-lg font-medium transition-all duration-200 text-sm">
-                        Validations
-                    </a>
-                    <a href="#" class="text-white hover:bg-primary-light px-4 py-2 rounded-lg font-medium transition-all duration-200 text-sm">
+                    <a href="{{ route('directeur.statistiques') }}"
+                    class="{{ request()->routeIs('directeur.statistiques') ? 'bg-accent text-white' : 'text-white hover:bg-primary-light' }} px-4 py-2 rounded-lg font-medium transition-all duration-200 text-sm">
                         Statistiques
                     </a>
                 @endif
+                    
 
                 {{-- ═══════════════════════════════════════════ --}}
                 {{-- MENU ADMINISTRATEUR --}}
@@ -254,10 +251,8 @@
 
             @if(auth()->user()->isDirecteurTechnique())
                 <a href="{{ route('directeur.dashboard') }}" class="block text-white hover:bg-primary-light px-4 py-2 rounded-lg">Tableau de bord</a>
-                <a href="#" class="block text-white hover:bg-primary-light px-4 py-2 rounded-lg">Contrôle Qualité</a>
-                <a href="#" class="block text-white hover:bg-primary-light px-4 py-2 rounded-lg">Essais</a>
-                <a href="#" class="block text-white hover:bg-primary-light px-4 py-2 rounded-lg">Validations</a>
-                <a href="#" class="block text-white hover:bg-primary-light px-4 py-2 rounded-lg">Statistiques</a>
+                <a href="{{ route('directeur.controle-qualite.index') }}" class="block text-white hover:bg-primary-light px-4 py-2 rounded-lg">Contrôle Qualité</a>
+                <a href="{{ route('directeur.statistiques') }}" class="block text-white hover:bg-primary-light px-4 py-2 rounded-lg">Statistiques</a>
             @endif
 
             @if(auth()->user()->isAdministrateur())

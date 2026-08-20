@@ -11,25 +11,16 @@ return new class extends Migration
         Schema::create('diagnostics', function (Blueprint $table) {
             $table->id();
 
-            // Intervention concernée
-            $table->foreignId('intervention_id')->constrained('interventions')->cascadeOnDelete();
+            $table->foreignId('intervention_id')
+                ->constrained('interventions')
+                ->cascadeOnDelete();
 
-            // Type de diagnostic
-            $table->enum('type', [
-                'visuel',
-                'valise_electronique',
-            ]);
+            $table->enum('type', ['visuel', 'valise'])->default('visuel');
 
-            $table->text('description')->nullable();
-
-            // Codes défauts pour le diagnostic électronique
-            $table->text('codes_defauts')->nullable();
-
+            $table->text('description');
+            $table->string('codes_defauts')->nullable();
             $table->text('observations')->nullable();
-
-            // Coût du diagnostic à la valise
-            $table->integer('cout_valise')->nullable();
-
+            $table->decimal('cout_valise', 10, 2)->default(0);
             $table->dateTime('date');
 
             $table->timestamps();

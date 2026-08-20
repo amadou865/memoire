@@ -121,11 +121,20 @@ Route::middleware(['auth'])->group(function () {
     });
 
     // ─────────────────────────────────────────
-    // ESPACE DIRECTEUR TECHNIQUE (à venir)
+    // ESPACE DIRECTEUR TECHNIQUE
     // ─────────────────────────────────────────
-    Route::get('/directeur/dashboard', function () {
-        return view('directeur.dashboard');
-    })->name('directeur.dashboard');
+    Route::middleware(['directeur'])->prefix('directeur')->name('directeur.')->group(function () {
+    Route::get('/dashboard', [\App\Http\Controllers\Directeur\DashboardController::class, 'index'])->name('dashboard');
+
+    // Contrôle qualité
+    Route::get('/controle-qualite', [\App\Http\Controllers\Directeur\ControleQualiteController::class, 'index'])->name('controle-qualite.index');
+    Route::get('/controle-qualite/{intervention}/effectuer', [\App\Http\Controllers\Directeur\ControleQualiteController::class, 'create'])->name('controle-qualite.create');
+    Route::post('/controle-qualite/{intervention}', [\App\Http\Controllers\Directeur\ControleQualiteController::class, 'store'])->name('controle-qualite.store');
+    Route::get('/controle-qualite/{intervention}', [\App\Http\Controllers\Directeur\ControleQualiteController::class, 'show'])->name('controle-qualite.show');
+
+    // Statistiques
+    Route::get('/statistiques', [\App\Http\Controllers\Directeur\StatistiqueController::class, 'index'])->name('statistiques');
+    });
 
     // ─────────────────────────────────────────
     // ESPACE ADMINISTRATEUR (à venir)

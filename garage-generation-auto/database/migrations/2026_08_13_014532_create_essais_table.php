@@ -17,9 +17,9 @@ return new class extends Migration
             $table->dateTime('date');
 
             $table->enum('resultat', [
-                'valide',
-                'non_valide',
-            ]);
+                'conforme',
+                'non_conforme',
+            ])->default('conforme');
 
             $table->text('observations')->nullable();
 
