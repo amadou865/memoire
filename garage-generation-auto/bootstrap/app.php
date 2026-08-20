@@ -36,6 +36,15 @@ return Application::configure(basePath: dirname(__DIR__))
         'directeur' => \App\Http\Middleware\IsDirecteurTechnique::class,
     ]);
     })
+    ->withMiddleware(function (Middleware $middleware) {
+    $middleware->alias([
+        'client' => \App\Http\Middleware\IsClient::class,
+        'receptionniste' => \App\Http\Middleware\IsReceptionniste::class,
+        'chef' => \App\Http\Middleware\IsChefDepartement::class,
+        'directeur' => \App\Http\Middleware\IsDirecteurTechnique::class,
+        'admin' => \App\Http\Middleware\IsAdministrateur::class,
+    ]);
+    })
     ->withExceptions(function (Exceptions $exceptions) {
         //
     })->create();

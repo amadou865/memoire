@@ -87,4 +87,31 @@ class User extends Authenticatable
     {
         return $this->role === 'administrateur';
     }
+
+    /**
+     * Génère automatiquement un matricule unique uniquement pour le personnel (hors clients).
+     */
+    public static function genererMatricule(string $role): ?string
+    {
+        // Si c'est un client, pas de matricule !
+        if ($role === 'client') {
+            return null;
+        }
+
+        $prefix = match ($role) {
+            'administrateur'      => 'ADM',
+            'directeur_technique' => 'DIR',
+            'chef_departement'    => 'CHF',
+            'receptionniste'      => 'REC',
+            default               => 'EMP',
+        };
+
+        $annee = date('Y');
+
+        // Compter les employés existants avec ce préfixe pour l'année
+        $count = self::where('matricule', 'like', "{$prefix}-{$annee}-%")->count() + 1;
+
+        return sprintf('%s-%s-%04d', $prefix, $annee, $count);
+    }
+
 }

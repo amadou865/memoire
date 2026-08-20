@@ -137,9 +137,21 @@ Route::middleware(['auth'])->group(function () {
     });
 
     // ─────────────────────────────────────────
-    // ESPACE ADMINISTRATEUR (à venir)
+    // ESPACE ADMINISTRATEUR
     // ─────────────────────────────────────────
-    Route::get('/admin/dashboard', function () {
-        return view('admin.dashboard');
-    })->name('admin.dashboard');
+    Route::middleware(['admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
+
+    // Utilisateurs
+    Route::resource('utilisateurs', \App\Http\Controllers\Admin\UserController::class)->parameters(['utilisateurs' => 'utilisateur']);
+
+    // Stock (Catalogue)
+    Route::resource('stock', \App\Http\Controllers\Admin\StockController::class);
+
+    // Statistiques
+    Route::get('/statistiques', [\App\Http\Controllers\Admin\StatistiqueController::class, 'index'])->name('statistiques');
+
+    // Paramètres
+    Route::get('/parametres', [\App\Http\Controllers\Admin\ParametreController::class, 'index'])->name('parametres');
+    });
 });
