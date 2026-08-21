@@ -25,7 +25,7 @@
                     </p>
 
                     <div class="mt-8 flex flex-wrap gap-4">
-                        {{-- Bouton principal --}}
+                        {{-- Bouton principal → scroll vers créneaux --}}
                         <a href="#creneaux"
                            class="inline-flex items-center gap-2 bg-accent hover:bg-accent-600 text-white font-semibold px-6 py-3.5 rounded-lg transition-all duration-200 shadow-lg shadow-accent/20">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -48,31 +48,22 @@
                 {{-- Colonne droite : Carte stats --}}
                 <div class="bg-primary rounded-2xl p-8 lg:p-10 shadow-2xl">
                     <div class="grid grid-cols-2 gap-6">
-
-                        {{-- Stat 1 : Interventions --}}
                         <div class="bg-primary-light/50 rounded-xl p-6">
                             <div class="text-4xl lg:text-5xl font-bold text-accent">2 847</div>
                             <div class="text-gray-300 mt-2 text-sm">Interventions réalisées</div>
                         </div>
-
-                        {{-- Stat 2 : Satisfaction --}}
                         <div class="bg-primary-light/50 rounded-xl p-6">
                             <div class="text-4xl lg:text-5xl font-bold text-accent">98%</div>
                             <div class="text-gray-300 mt-2 text-sm">Clients satisfaits</div>
                         </div>
-
-                        {{-- Stat 3 : Techniciens --}}
                         <div class="bg-primary-light/50 rounded-xl p-6">
                             <div class="text-4xl lg:text-5xl font-bold text-accent">12</div>
                             <div class="text-gray-300 mt-2 text-sm">Techniciens experts</div>
                         </div>
-
-                        {{-- Stat 4 : Départements --}}
                         <div class="bg-primary-light/50 rounded-xl p-6">
                             <div class="text-4xl lg:text-5xl font-bold text-accent">5</div>
                             <div class="text-gray-300 mt-2 text-sm">Départements</div>
                         </div>
-
                     </div>
                 </div>
 
@@ -86,7 +77,6 @@
     <section id="services" class="py-16 lg:py-24 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-            {{-- Titre de section --}}
             <div class="mb-12">
                 <p class="text-accent font-bold text-sm tracking-wider uppercase mb-3">Nos services</p>
                 <h2 class="text-3xl lg:text-4xl font-bold text-primary">
@@ -94,10 +84,8 @@
                 </h2>
             </div>
 
-            {{-- Grille de services --}}
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
 
-                {{-- Service 1 : Mécanique --}}
                 <div class="bg-white border border-gray-200 rounded-2xl p-6 hover:shadow-lg hover:border-accent transition-all duration-300">
                     <div class="w-12 h-12 bg-accent/10 rounded-xl flex items-center justify-center mb-4">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -111,7 +99,6 @@
                     </p>
                 </div>
 
-                {{-- Service 2 : Électricité --}}
                 <div class="bg-white border border-gray-200 rounded-2xl p-6 hover:shadow-lg hover:border-accent transition-all duration-300">
                     <div class="w-12 h-12 bg-accent/10 rounded-xl flex items-center justify-center mb-4">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -124,7 +111,6 @@
                     </p>
                 </div>
 
-                {{-- Service 3 : Froid & Climatisation --}}
                 <div class="bg-white border border-gray-200 rounded-2xl p-6 hover:shadow-lg hover:border-accent transition-all duration-300">
                     <div class="w-12 h-12 bg-accent/10 rounded-xl flex items-center justify-center mb-4">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -137,7 +123,6 @@
                     </p>
                 </div>
 
-                {{-- Service 4 : Tôlerie --}}
                 <div class="bg-white border border-gray-200 rounded-2xl p-6 hover:shadow-lg hover:border-accent transition-all duration-300">
                     <div class="w-12 h-12 bg-accent/10 rounded-xl flex items-center justify-center mb-4">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -150,7 +135,6 @@
                     </p>
                 </div>
 
-                {{-- Service 5 : Peinture --}}
                 <div class="bg-white border border-gray-200 rounded-2xl p-6 hover:shadow-lg hover:border-accent transition-all duration-300">
                     <div class="w-12 h-12 bg-accent/10 rounded-xl flex items-center justify-center mb-4">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -168,96 +152,87 @@
     </section>
 
     {{-- ═══════════════════════════════════════════════════════ --}}
-    {{-- SECTION 3 : CRÉNEAUX DISPONIBLES --}}
+    {{-- SECTION 3 : CRÉNEAUX DISPONIBLES (dynamiques + cliquables) --}}
     {{-- ═══════════════════════════════════════════════════════ --}}
     <section id="creneaux" class="py-16 lg:py-24 bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-            {{-- Titre --}}
             <div class="mb-12">
                 <p class="text-accent font-bold text-sm tracking-wider uppercase mb-3">Disponibilités</p>
                 <h2 class="text-3xl lg:text-4xl font-bold text-primary">
-                    Créneaux disponibles cette semaine
+                    Créneaux disponibles
                 </h2>
+                <p class="mt-3 text-gray-600">
+                    Cliquez sur une date verte pour réserver.
+                    @guest
+                        <span class="text-accent font-medium">Connexion ou création de compte requise.</span>
+                    @endguest
+                </p>
             </div>
 
-            {{-- Calendrier --}}
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 lg:p-8">
 
-                {{-- Header du calendrier --}}
+                {{-- Header --}}
                 <div class="flex items-center justify-between mb-6">
                     <h3 class="text-xl font-bold text-primary">
                         {{ \Carbon\Carbon::now()->locale('fr')->translatedFormat('F Y') }}
                     </h3>
-                    <div class="flex gap-2">
-                        <button class="w-10 h-10 border border-gray-200 hover:border-primary rounded-lg flex items-center justify-center transition-colors">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-                            </svg>
-                        </button>
-                        <button class="w-10 h-10 border border-gray-200 hover:border-primary rounded-lg flex items-center justify-center transition-colors">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                            </svg>
-                        </button>
-                    </div>
+                    <p class="text-sm text-gray-500">
+                        Lun–Ven 8h–18h · Sam 8h–13h · Dim. fermé
+                    </p>
                 </div>
 
                 {{-- Jours de la semaine --}}
                 <div class="grid grid-cols-7 gap-2 mb-2">
-                    <div class="text-center text-xs font-semibold text-gray-400 py-2">LUN</div>
-                    <div class="text-center text-xs font-semibold text-gray-400 py-2">MAR</div>
-                    <div class="text-center text-xs font-semibold text-gray-400 py-2">MER</div>
-                    <div class="text-center text-xs font-semibold text-gray-400 py-2">JEU</div>
-                    <div class="text-center text-xs font-semibold text-gray-400 py-2">VEN</div>
-                    <div class="text-center text-xs font-semibold text-gray-400 py-2">SAM</div>
-                    <div class="text-center text-xs font-semibold text-gray-400 py-2">DIM</div>
+                    @foreach(['LUN', 'MAR', 'MER', 'JEU', 'VEN', 'SAM', 'DIM'] as $jour)
+                        <div class="text-center text-xs font-semibold text-gray-400 py-2">{{ $jour }}</div>
+                    @endforeach
                 </div>
 
-                {{-- Jours du mois (exemple statique) --}}
+                {{-- Grille dynamique : 2 semaines à partir de lundi --}}
                 <div class="grid grid-cols-7 gap-2">
-                    {{-- Semaine 1 --}}
-                    <div></div>
-                    <div></div>
-                    <div class="text-center py-3 text-gray-400 text-sm">1</div>
-                    <div class="text-center py-3 text-gray-400 text-sm">2</div>
-                    <div class="text-center py-3 text-gray-400 text-sm">3</div>
-                    <div class="text-center py-3 text-gray-400 text-sm">4</div>
-                    <div class="text-center py-3 text-gray-400 text-sm">5</div>
+                    @php
+                        $today = \Carbon\Carbon::today();
+                        $start = $today->copy()->startOfWeek(); // lundi
+                        $heureDefaut = '09:00';
+                    @endphp
 
-                    {{-- Semaine 2 --}}
-                    <div class="text-center py-3 text-gray-400 text-sm">6</div>
-                    <div class="text-center py-3 text-gray-400 text-sm">7</div>
-                    <div class="text-center py-3 text-gray-400 text-sm">8</div>
-                    <div class="text-center py-3 text-gray-400 text-sm">9</div>
-                    <div class="text-center py-3 text-gray-400 text-sm">10</div>
-                    <div class="text-center py-3 text-gray-400 text-sm">11</div>
-                    <div class="text-center py-3 text-gray-400 text-sm">12</div>
+                    @for($i = 0; $i < 14; $i++)
+                        @php
+                            $date = $start->copy()->addDays($i);
+                            $isPast   = $date->lt($today);
+                            $isSunday = $date->isSunday();
+                            $isToday  = $date->isToday();
+                            $disponible = !$isPast && !$isSunday;
 
-                    {{-- Semaine 3 --}}
-                    <div class="text-center py-3 text-gray-400 text-sm">13</div>
-                    <div class="text-center py-3 text-gray-400 text-sm">14</div>
-                    <div class="text-center py-3 text-gray-400 text-sm">15</div>
-                    <div class="text-center py-3 text-gray-400 text-sm">16</div>
-                    <div class="text-center py-3 text-gray-400 text-sm">17</div>
-                    <div class="text-center py-3 text-gray-400 text-sm">18</div>
-                    <div class="text-center py-3 text-gray-400 text-sm">19</div>
+                            // URL du formulaire RDV avec date pré-remplie
+                            $rdvUrl = route('client.rendez-vous.create', [
+                                'date'  => $date->format('Y-m-d'),
+                                'heure' => $heureDefaut,
+                            ]);
 
-                    {{-- Semaine 4 - Créneaux disponibles --}}
-                    <div class="text-center py-3 text-gray-400 text-sm">20</div>
-                    <button class="text-center py-3 bg-accent text-white rounded-lg font-semibold hover:bg-accent-600 transition-all">21</button>
-                    <button class="text-center py-3 bg-green-100 text-green-700 rounded-lg font-semibold hover:bg-green-200 transition-all">22</button>
-                    <button class="text-center py-3 bg-green-100 text-green-700 rounded-lg font-semibold hover:bg-green-200 transition-all">23</button>
-                    <button class="text-center py-3 bg-green-100 text-green-700 rounded-lg font-semibold hover:bg-green-200 transition-all">24</button>
-                    <button class="text-center py-3 bg-green-100 text-green-700 rounded-lg font-semibold hover:bg-green-200 transition-all">25</button>
-                    <div class="text-center py-3 text-gray-400 text-sm">26</div>
+                            // Si non connecté → login, puis retour vers le RDV
+                            $cible = auth()->check()
+                                ? $rdvUrl
+                                : route('login', ['redirect' => $rdvUrl]);
+                        @endphp
 
-                    {{-- Semaine 5 --}}
-                    <button class="text-center py-3 bg-green-100 text-green-700 rounded-lg font-semibold hover:bg-green-200 transition-all">27</button>
-                    <button class="text-center py-3 bg-green-100 text-green-700 rounded-lg font-semibold hover:bg-green-200 transition-all">28</button>
-                    <button class="text-center py-3 bg-green-100 text-green-700 rounded-lg font-semibold hover:bg-green-200 transition-all">29</button>
-                    <button class="text-center py-3 bg-green-100 text-green-700 rounded-lg font-semibold hover:bg-green-200 transition-all">30</button>
-                    <button class="text-center py-3 bg-green-100 text-green-700 rounded-lg font-semibold hover:bg-green-200 transition-all">31</button>
+                        @if($disponible)
+                            <a href="{{ $cible }}"
+                               title="Réserver le {{ $date->locale('fr')->isoFormat('dddd D MMMM') }}"
+                               class="text-center py-3 rounded-lg font-semibold transition-all
+                                      {{ $isToday
+                                            ? 'bg-accent text-white hover:bg-accent-600'
+                                            : 'bg-green-100 text-green-700 hover:bg-green-200' }}">
+                                {{ $date->format('d') }}
+                            </a>
+                        @else
+                            <div class="text-center py-3 text-sm rounded-lg
+                                {{ $isSunday ? 'text-red-300 bg-red-50' : 'text-gray-400' }}">
+                                {{ $date->format('d') }}
+                            </div>
+                        @endif
+                    @endfor
                 </div>
 
                 {{-- Légende --}}
@@ -268,13 +243,36 @@
                     </div>
                     <div class="flex items-center gap-2">
                         <div class="w-4 h-4 bg-green-100 rounded"></div>
-                        <span class="text-gray-600">Disponible</span>
+                        <span class="text-gray-600">Disponible — cliquable</span>
                     </div>
                     <div class="flex items-center gap-2">
                         <div class="w-4 h-4 bg-gray-100 rounded"></div>
-                        <span class="text-gray-600">Indisponible</span>
+                        <span class="text-gray-600">Passé / indisponible</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-4 h-4 bg-red-50 border border-red-100 rounded"></div>
+                        <span class="text-gray-600">Dimanche — fermé</span>
                     </div>
                 </div>
+
+                {{-- Message pour visiteurs non connectés --}}
+                @guest
+                    <div class="mt-6 p-4 bg-primary/5 border border-primary/10 rounded-xl text-center">
+                        <p class="text-sm text-gray-700 mb-3">
+                            Pour finaliser votre rendez-vous, connectez-vous ou créez un compte gratuitement.
+                        </p>
+                        <div class="flex flex-wrap justify-center gap-3">
+                            <a href="{{ route('login') }}"
+                               class="px-5 py-2.5 bg-primary text-white text-sm font-semibold rounded-lg hover:bg-primary-light transition">
+                                Se connecter
+                            </a>
+                            <a href="{{ route('register') }}"
+                               class="px-5 py-2.5 bg-accent text-white text-sm font-semibold rounded-lg hover:bg-accent-600 transition">
+                                Créer un compte
+                            </a>
+                        </div>
+                    </div>
+                @endguest
             </div>
         </div>
     </section>
