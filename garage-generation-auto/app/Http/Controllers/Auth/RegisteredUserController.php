@@ -37,25 +37,25 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
+        // Sauvegarder l'URL du RDV en session pour la redirection après activation
+        if ($request->filled('redirect')) {
+            session(['url.intended' => $request->input('redirect')]);
+        }
+
         $user = User::create([
             'nom' => $request->nom,
             'prenom' => $request->prenom,
             'email' => $request->email,
             'telephone' => $request->telephone,
             'password' => Hash::make($request->password),
-            'role' => 'client', // Role par défaut pour toute inscription publique
+            'role' => 'client',
         ]);
 
+        // Déclenche l'envoi de l'email d'activation
         event(new Registered($user));
 
         Auth::login($user);
 
-        // 1. Si le nouveau client a cliqué sur un créneau depuis la page d'accueil
-        if ($request->filled('redirect')) {
-            return redirect()->to($request->input('redirect'));
-        }
-
-        // 2. Sinon redirection par défaut vers son tableau de bord client
-        return redirect(route('client.dashboard', absolute: false));
+        return redirect()->route('verification.notice');
     }
 }

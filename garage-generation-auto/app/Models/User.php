@@ -2,11 +2,12 @@
 
 namespace App\Models;
 
+use Illuminate\Contracts\Auth\MustVerifyEmail; // 👈 1. Import de l'interface
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail // 👈 2. Activation ici !
 {
     use HasFactory, Notifiable;
 
@@ -93,7 +94,6 @@ class User extends Authenticatable
      */
     public static function genererMatricule(string $role): ?string
     {
-        // Si c'est un client, pas de matricule !
         if ($role === 'client') {
             return null;
         }
@@ -107,11 +107,8 @@ class User extends Authenticatable
         };
 
         $annee = date('Y');
-
-        // Compter les employés existants avec ce préfixe pour l'année
         $count = self::where('matricule', 'like', "{$prefix}-{$annee}-%")->count() + 1;
 
         return sprintf('%s-%s-%04d', $prefix, $annee, $count);
     }
-
 }
