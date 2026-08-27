@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Receptionniste;
 use App\Http\Controllers\Controller;
 use App\Models\Devis;
 use App\Models\Intervention;
+use App\Services\NotificationService;
 use Illuminate\Http\Request;
 
 class DevisController extends Controller
@@ -110,5 +111,26 @@ class DevisController extends Controller
 
         return redirect()->route('receptionniste.devis.index')
             ->with('success', 'Devis supprimé.');
+    }
+
+    /**
+ * Transmettre le devis au client pour validation
+ */
+public function envoyerAuClient(Devis $devi)
+{
+    $devi->update(['statut' => 'envoye']);
+
+    $client = $devi->intervention->vehicule->client;
+
+    // Envoie une notification interne au client
+    NotificationService::envoyer(
+        $client,
+        'Nouveau devis à valider 📋',
+        "Le devis n° {$devi->numero} d'un montant de " . number_format($devi->montant_total, 0, ',', ' ') . " FCFA est en attente de votre validation.",
+        'facture_generee',
+        route('client.devis.show', $devi)
+    );
+
+        return back()->with('success', "Le devis n° {$devi->numero} a été transmis au client pour validation.");
     }
 }

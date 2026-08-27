@@ -9,6 +9,7 @@ use App\Models\Intervention;
 use App\Models\PieceDetachee;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Carbon\Carbon;
 
 class DatabaseSeeder extends Seeder
@@ -27,6 +28,7 @@ class DatabaseSeeder extends Seeder
             'role' => 'administrateur',
             'matricule' => 'ADM-001',
             'niveau_acces' => 'super_admin',
+            'email_verified_at' => now(),
         ]);
 
         // ═══════════════════════════════════════════
@@ -41,6 +43,7 @@ class DatabaseSeeder extends Seeder
             'role' => 'directeur_technique',
             'matricule' => 'DIR-001',
             'grade' => 'Ingénieur Senior',
+            'email_verified_at' => now(),
         ]);
 
         // ═══════════════════════════════════════════
@@ -54,6 +57,7 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('password'),
             'role' => 'receptionniste',
             'matricule' => 'REC-001',
+            'email_verified_at' => now(),
         ]);
 
         User::create([
@@ -64,29 +68,31 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('password'),
             'role' => 'receptionniste',
             'matricule' => 'REC-002',
+            'email_verified_at' => now(),
         ]);
 
         // ═══════════════════════════════════════════
         // 4. CHEFS DE DÉPARTEMENT
         // ═══════════════════════════════════════════
         $departements = [
-            ['nom' => 'BA', 'prenom' => 'Ibrahima', 'dept' => 'Mécanique', 'mat' => 'CHF-001'],
-            ['nom' => 'SOW', 'prenom' => 'Ousmane', 'dept' => 'Électricité', 'mat' => 'CHF-002'],
-            ['nom' => 'DIALLO', 'prenom' => 'Mamadou', 'dept' => 'Tôlerie', 'mat' => 'CHF-003'],
-            ['nom' => 'GUEYE', 'prenom' => 'Cheikh', 'dept' => 'Peinture', 'mat' => 'CHF-004'],
-            ['nom' => 'THIAM', 'prenom' => 'Aliou', 'dept' => 'Climatisation', 'mat' => 'CHF-005'],
+            ['nom' => 'BA', 'prenom' => 'Ibrahima', 'dept' => 'Mécanique', 'slug' => 'mecanique', 'mat' => 'CHF-001'],
+            ['nom' => 'SOW', 'prenom' => 'Ousmane', 'dept' => 'Électricité', 'slug' => 'electricite', 'mat' => 'CHF-002'],
+            ['nom' => 'DIALLO', 'prenom' => 'Mamadou', 'dept' => 'Tôlerie', 'slug' => 'tolerie', 'mat' => 'CHF-003'],
+            ['nom' => 'GUEYE', 'prenom' => 'Cheikh', 'dept' => 'Peinture', 'slug' => 'peinture', 'mat' => 'CHF-004'],
+            ['nom' => 'THIAM', 'prenom' => 'Aliou', 'dept' => 'Climatisation', 'slug' => 'climatisation', 'mat' => 'CHF-005'],
         ];
 
         foreach ($departements as $index => $chef) {
             User::create([
                 'nom' => $chef['nom'],
                 'prenom' => $chef['prenom'],
-                'email' => 'chef.' . strtolower($chef['dept']) . '@garage.sn',
+                'email' => 'chef.' . $chef['slug'] . '@garage.sn',
                 'telephone' => '+221 77 444 55 ' . str_pad($index + 1, 2, '0', STR_PAD_LEFT),
                 'password' => Hash::make('password'),
                 'role' => 'chef_departement',
                 'matricule' => $chef['mat'],
                 'departement' => $chef['dept'],
+                'email_verified_at' => now(),
             ]);
         }
 
@@ -143,6 +149,7 @@ class DatabaseSeeder extends Seeder
                 'telephone' => $c['tel'],
                 'password' => Hash::make('password'),
                 'role' => 'client',
+                'email_verified_at' => now(),
             ]);
             $createdClients[] = $client;
 
@@ -173,8 +180,8 @@ class DatabaseSeeder extends Seeder
             ['ref' => 'AMP-001', 'des' => 'Ampoule H4', 'stock' => 100, 'seuil' => 20, 'prix' => 2500],
             ['ref' => 'PNE-001', 'des' => 'Pneu 195/65 R15', 'stock' => 12, 'seuil' => 4, 'prix' => 55000],
             ['ref' => 'CLI-001', 'des' => 'Gaz réfrigérant R134a', 'stock' => 15, 'seuil' => 5, 'prix' => 18000],
-            ['ref' => 'BOU-001', 'des' => 'Bougie d\'allumage', 'stock' => 4, 'seuil' => 10, 'prix' => 3000], // Stock faible
-            ['ref' => 'COU-001', 'des' => 'Courroie de distribution', 'stock' => 2, 'seuil' => 3, 'prix' => 35000], // Stock faible
+            ['ref' => 'BOU-001', 'des' => 'Bougie d\'allumage', 'stock' => 4, 'seuil' => 10, 'prix' => 3000],
+            ['ref' => 'COU-001', 'des' => 'Courroie de distribution', 'stock' => 2, 'seuil' => 3, 'prix' => 35000],
         ];
 
         foreach ($pieces as $p) {
@@ -193,8 +200,7 @@ class DatabaseSeeder extends Seeder
         $typesRdv = ['Vidange', 'Révision', 'Diagnostic', 'Réparation freinage', 'Climatisation'];
         $statutsRdv = ['en_attente', 'confirme', 'annule'];
 
-        foreach ($createdClients as $index => $client) {
-            // Chaque client a 1 à 2 RDV
+        foreach ($createdClients as $client) {
             $nbRdv = rand(1, 2);
             for ($i = 0; $i < $nbRdv; $i++) {
                 RendezVous::create([
@@ -210,7 +216,7 @@ class DatabaseSeeder extends Seeder
         }
 
         // ═══════════════════════════════════════════
-        // 8. INTERVENTIONS (quelques exemples)
+        // 8. INTERVENTIONS
         // ═══════════════════════════════════════════
         $natures = ['Vidange complète', 'Changement plaquettes', 'Diagnostic électronique', 'Recharge clim', 'Réparation carrosserie'];
         $depts = ['Mécanique', 'Électricité', 'Tôlerie', 'Peinture', 'Climatisation'];
@@ -239,7 +245,7 @@ class DatabaseSeeder extends Seeder
         $this->command->info('║  Admin       : admin@garage.sn             ║');
         $this->command->info('║  Directeur   : directeur@garage.sn         ║');
         $this->command->info('║  Réception   : receptionniste@garage.sn    ║');
-        $this->command->info('║  Chef Méca   : chef.mécanique@garage.sn    ║');
+        $this->command->info('║  Chef Méca   : chef.mecanique@garage.sn    ║');
         $this->command->info('║  Client      : client@garage.sn            ║');
         $this->command->info('╚════════════════════════════════════════════╝');
     }

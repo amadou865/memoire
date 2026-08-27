@@ -8,17 +8,23 @@ return new class extends Migration
 {
     public function up(): void
     {
+        Schema::dropIfExists('notifications');
+
         Schema::create('notifications', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('essai_id')->constrained('essais')->cascadeOnDelete();
+            // L'utilisateur qui reçoit la notification
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
 
+            $table->string('titre');
             $table->text('message');
+            $table->string('type_notif'); // ex: devis, rdv, facture
+            $table->string('lien')->nullable(); // Lien où la personne est redirigée en cliquant
 
-            $table->string('type_notif');
+            // Optionnel : lié à un essai s'il s'agit d'un contrôle qualité
+            $table->foreignId('essai_id')->nullable()->constrained('essais')->nullOnDelete();
 
             $table->dateTime('date_envoi');
-
             $table->boolean('lu')->default(false);
 
             $table->timestamps();

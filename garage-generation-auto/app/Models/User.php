@@ -111,4 +111,14 @@ class User extends Authenticatable implements MustVerifyEmail // 👈 2. Activat
 
         return sprintf('%s-%s-%04d', $prefix, $annee, $count);
     }
+
+    public function notifications()
+    {
+        return $this->hasMany(Notification::class)->latest('date_envoi');
+    }
+
+    public function notificationsNonLues()
+    {
+        return $this->hasMany(Notification::class)->where('lu', false)->latest('date_envoi');
+    }
 }

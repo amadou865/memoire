@@ -9,6 +9,8 @@ class Devis extends Model
 {
     use HasFactory;
 
+    protected $table = 'devis';
+
     protected $fillable = [
         'intervention_id',
         'numero',
@@ -17,10 +19,13 @@ class Devis extends Model
         'montant_pieces',
         'montant_valise',
         'statut',
+        'motif_refus',
+        'date_validation',
     ];
 
     protected $casts = [
         'date_creation' => 'date',
+        'date_validation' => 'datetime',
         'montant_mo' => 'decimal:2',
         'montant_pieces' => 'decimal:2',
         'montant_valise' => 'decimal:2',
@@ -38,8 +43,12 @@ class Devis extends Model
 
     public function getMontantTotalAttribute()
     {
-        return $this->montant_mo
-            + $this->montant_pieces
-            + $this->montant_valise;
+        return $this->montant_mo + $this->montant_pieces + $this->montant_valise;
+    }
+
+    /** Le devis peut-il être facturé ? */
+    public function peutEtreFacture(): bool
+    {
+        return $this->statut === 'valide';
     }
 }

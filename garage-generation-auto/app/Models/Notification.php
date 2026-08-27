@@ -10,9 +10,11 @@ class Notification extends Model
     use HasFactory;
 
     protected $fillable = [
-        'essai_id',
+        'user_id',
+        'titre',
         'message',
         'type_notif',
+        'lien',
         'date_envoi',
         'lu',
     ];
@@ -22,8 +24,8 @@ class Notification extends Model
         'lu' => 'boolean',
     ];
 
-    public function essai()
+    public function user()
     {
-        return $this->belongsTo(Essai::class);
+        return $this->belongsTo(User::class);
     }
 }

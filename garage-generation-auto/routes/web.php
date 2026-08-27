@@ -66,6 +66,12 @@ Route::middleware(['auth'])->group(function () {
 
         // Factures
         Route::get('/factures', [\App\Http\Controllers\Client\FactureController::class, 'index'])->name('factures.index');
+
+        // Devis Client
+        Route::get('/devis', [\App\Http\Controllers\Client\DevisController::class, 'index'])->name('devis.index');
+        Route::get('/devis/{devi}', [\App\Http\Controllers\Client\DevisController::class, 'show'])->name('devis.show');
+        Route::patch('/devis/{devi}/valider', [\App\Http\Controllers\Client\DevisController::class, 'valider'])->name('devis.valider');
+        Route::patch('/devis/{devi}/refuser', [\App\Http\Controllers\Client\DevisController::class, 'refuser'])->name('devis.refuser');
     });
 
     // ─────────────────────────────────────────
@@ -96,6 +102,9 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/factures/{facture}', [\App\Http\Controllers\Receptionniste\FactureController::class, 'destroy'])->name('factures.destroy');
     Route::post('/devis/{devi}/generer-facture', [\App\Http\Controllers\Receptionniste\FactureController::class, 'genererDepuisDevis'])->name('factures.generer');
     Route::patch('/factures/{facture}/paiement', [\App\Http\Controllers\Receptionniste\FactureController::class, 'enregistrerPaiement'])->name('factures.paiement');
+    
+    // Envoi du devis au client par le réceptionniste
+    Route::patch('/devis/{devi}/envoyer', [\App\Http\Controllers\Receptionniste\DevisController::class, 'envoyerAuClient'])->name('devis.envoyer');
     });
     // ─────────────────────────────────────────
     // ESPACE CHEF DE DÉPARTEMENT
@@ -154,4 +163,10 @@ Route::middleware(['auth'])->group(function () {
     // Paramètres
     Route::get('/parametres', [\App\Http\Controllers\Admin\ParametreController::class, 'index'])->name('parametres');
     });
+
+    // Notifications
+    Route::get('/notifications', [\App\Http\Controllers\NotificationController::class, 'index'])->name('notifications.index');
+    Route::get('/notifications/{notification}/lire', [\App\Http\Controllers\NotificationController::class, 'lire'])->name('notifications.lire');
+    Route::post('/notifications/tout-lire', [\App\Http\Controllers\NotificationController::class, 'toutLire'])->name('notifications.tout-lire');
+    Route::delete('/notifications/{notification}', [\App\Http\Controllers\NotificationController::class, 'destroy'])->name('notifications.destroy');
 });
