@@ -5,122 +5,136 @@ namespace App\Http\Controllers\Directeur;
 use App\Http\Controllers\Controller;
 use App\Models\Intervention;
 use App\Models\Essai;
-use App\Models\Notification;
+use App\Services\NotificationService;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
+use Illuminate\Http\RedirectResponse;
 
 class ControleQualiteController extends Controller
 {
     /**
-     * Liste des interventions à contrôler
+     * Liste des interventions avec filtre
      */
-    public function index(Request $request)
+    public function index(Request $request): View
     {
-        $filtre = $request->get('filtre', 'a_controler'); // a_controler | conformes | non_conformes | tous
+        $filtre = $request->get('filtre', 'a_controler');
 
-        $query = Intervention::with('vehicule.client', 'essai');
+        $query = Intervention::with(['vehicule.client', 'essai']);
 
-        switch ($filtre) {
-            case 'a_controler':
-                $query->where('statut', 'terminee')->whereDoesntHave('essai');
-                break;
-            case 'conformes':
-                $query->whereHas('essai', fn($q) => $q->where('resultat', 'conforme'));
-                break;
-            case 'non_conformes':
-                $query->whereHas('essai', fn($q) => $q->where('resultat', 'non_conforme'));
-                break;
+        // Logique de filtrage selon l'onglet cliqué
+        if ($filtre === 'a_controler') {
+            $interventions = $query->where('statut', 'terminee')
+                ->whereDoesntHave('essai')
+                ->latest('date_fin')
+                ->paginate(10);
+        } elseif ($filtre === 'conformes') {
+            $interventions = $query->whereHas('essai', function ($q) {
+                $q->where('resultat', 'conforme');
+            })->latest('date_fin')->paginate(10);
+        } elseif ($filtre === 'non_conformes') {
+            $interventions = $query->whereHas('essai', function ($q) {
+                $q->where('resultat', 'non_conforme');
+            })->latest('date_fin')->paginate(10);
+        } else {
+            // 'tous'
+            $interventions = $query->latest('date_fin')->paginate(10);
         }
 
-        $interventions = $query->latest('date_fin')->paginate(15)->withQueryString();
+        // Historique des essais récents
+        $essaisRecents = Essai::with(['intervention.vehicule.client'])
+            ->latest('date')
+            ->take(10)
+            ->get();
 
-        return view('directeur.controle-qualite.index', compact('interventions', 'filtre'));
+        return view('directeur.controle-qualite.index', [
+            'interventions' => $interventions,
+            'interventionsAControler' => $interventions,
+            'essaisRecents' => $essaisRecents,
+            'filtre' => $filtre,
+        ]);
     }
 
     /**
-     * Formulaire d'essai pour une intervention
+     * Afficher le détail d'un contrôle
      */
-    public function create(Intervention $intervention)
+    public function show(Intervention $intervention): View
     {
-        // Ne peut contrôler que les interventions terminées sans essai
-        if ($intervention->statut !== 'terminee') {
-            return back()->with('error', 'Cette intervention n\'est pas prête pour le contrôle.');
-        }
+        $intervention->load(['vehicule.client', 'diagnostics', 'lignesPieces.piece', 'essai']);
 
-        if ($intervention->essai) {
-            return redirect()->route('directeur.controle-qualite.show', $intervention)
-                ->with('info', 'Un essai a déjà été effectué.');
-        }
+        return view('directeur.controle-qualite.show', compact('intervention'));
+    }
 
-        $intervention->load('vehicule.client', 'diagnostics', 'lignesPieces.piece');
+    /**
+     * Formulaire d'essai qualité
+     */
+    public function create(Intervention $intervention): View
+    {
+        $intervention->load(['vehicule.client', 'diagnostics', 'lignesPieces.piece']);
 
         return view('directeur.controle-qualite.create', compact('intervention'));
     }
 
     /**
-     * Enregistrer l'essai
+     * Enregistrer le résultat du contrôle qualité
      */
-    public function store(Request $request, Intervention $intervention)
+    public function store(Request $request, Intervention $intervention): RedirectResponse
     {
-        if ($intervention->essai) {
-            return back()->with('error', 'Un essai existe déjà.');
-        }
-
-        $data = $request->validate([
-            'resultat' => 'required|in:conforme,non_conforme',
-            'observations' => 'nullable|string|max:1000',
-            'motif_non_conformite' => 'nullable|required_if:resultat,non_conforme|string|max:1000',
+        $validated = $request->validate([
+            'resultat' => ['required', 'in:conforme,non_conforme'],
+            'observations' => ['nullable', 'string', 'max:1000'],
+            'motif_non_conformite' => ['required_if:resultat,non_conforme', 'nullable', 'string', 'max:1000'],
+        ], [
+            'motif_non_conformite.required_if' => 'Le motif est obligatoire en cas de non-conformité.',
         ]);
 
-        $essai = Essai::create([
-            'intervention_id' => $intervention->id,
-            'date' => now(),
-            'resultat' => $data['resultat'],
-            'observations' => $data['observations'] ?? null,
-            'motif_non_conformite' => $data['motif_non_conformite'] ?? null,
-            'heure_validation' => now(),
-        ]);
+        // Enregistrer ou mettre à jour l'essai
+        $essai = Essai::updateOrCreate(
+            ['intervention_id' => $intervention->id],
+            [
+                'date' => now(),
+                'resultat' => $validated['resultat'],
+                'observations' => $validated['observations'] ?? null,
+                'motif_non_conformite' => $validated['resultat'] === 'non_conforme' ? $validated['motif_non_conformite'] : null,
+                'heure_validation' => now(),
+            ]
+        );
 
-        // Créer une notification
-        if ($data['resultat'] === 'conforme') {
-            // Notifier réceptionniste : autorisation facturation
-            Notification::create([
-                'essai_id' => $essai->id,
-                'message' => "Intervention #{$intervention->id} conforme. Facturation autorisée.",
-                'type_notif' => 'facturation_autorisee',
-                'date_envoi' => now(),
-                'lu' => false,
-            ]);
+        if ($validated['resultat'] === 'conforme') {
+            // 🔔 SI CONFORME : Notifier les Réceptionnistes
+            NotificationService::envoyerAuRole(
+                'receptionniste',
+                'Contrôle qualité conforme ✅',
+                "L'intervention #{$intervention->id} pour le véhicule {$intervention->vehicule->immatriculation} est conforme. Facturation autorisée.",
+                'qualite_conforme',
+                route('receptionniste.interventions.show', $intervention)
+            );
 
             return redirect()->route('directeur.controle-qualite.index')
                 ->with('success', '✓ Essai conforme ! Facturation autorisée, réceptionniste notifié.');
         } else {
-            // Notifier chef de département : retour atelier
-            $intervention->update(['statut' => 'en_cours']); // Retour en atelier
-
-            Notification::create([
-                'essai_id' => $essai->id,
-                'message' => "Intervention #{$intervention->id} non conforme. Retour en atelier. Motif : " . $data['motif_non_conformite'],
-                'type_notif' => 'retour_atelier',
-                'date_envoi' => now(),
-                'lu' => false,
+            // 🔔 SI NON CONFORME : Remettre en cours & Notifier le Chef + Réceptionniste
+            $intervention->update([
+                'statut' => 'en_cours',
             ]);
 
+            NotificationService::envoyerAuDepartement(
+                $intervention->departement,
+                'Retour atelier — Non conforme ⚠️',
+                "L'intervention #{$intervention->id} ({$intervention->vehicule->immatriculation}) a été refusée au contrôle qualité. Motif : {$validated['motif_non_conformite']}",
+                'qualite_non_conforme',
+                route('chef.interventions.show', $intervention)
+            );
+
+            NotificationService::envoyerAuRole(
+                'receptionniste',
+                'Intervention non conforme ⚠️',
+                "L'intervention #{$intervention->id} a été refusée au contrôle qualité et renvoyée à l'atelier.",
+                'qualite_non_conforme',
+                route('receptionniste.interventions.show', $intervention)
+            );
+
             return redirect()->route('directeur.controle-qualite.index')
-                ->with('error', '⚠️ Intervention non conforme. Retour en atelier, chef de département notifié.');
+                ->with('error', '✗ Essai non conforme. L\'intervention a été renvoyée à l\'atelier du chef de département.');
         }
-    }
-
-    /**
-     * Voir l'essai d'une intervention
-     */
-    public function show(Intervention $intervention)
-    {
-        if (!$intervention->essai) {
-            return redirect()->route('directeur.controle-qualite.create', $intervention);
-        }
-
-        $intervention->load('vehicule.client', 'diagnostics', 'lignesPieces.piece', 'essai');
-
-        return view('directeur.controle-qualite.show', compact('intervention'));
     }
 }

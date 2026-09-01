@@ -13,19 +13,33 @@ use Illuminate\Http\RedirectResponse;
 class FactureController extends Controller
 {
     /**
-     * Liste des factures
+     * Liste des factures avec statistiques et filtre
      */
-    public function index(): View
+    public function index(Request $request): View
     {
-        $factures = Facture::with(['devis.intervention.vehicule.client'])
-            ->latest('date_emission')
-            ->paginate(15);
+        $statut = $request->get('statut');
 
-        return view('receptionniste.factures.index', compact('factures'));
+        $query = Facture::with(['devis.intervention.vehicule.client']);
+
+        if ($statut && in_array($statut, ['en_attente', 'paye', 'annule'])) {
+            $query->where('statut', $statut);
+        }
+
+        $factures = $query->latest('date_emission')->paginate(15);
+
+        // 📊 Statistiques pour les cartes avec les NOMS DE CLÉS EXACTS attendus par la vue
+        $stats = [
+            'total' => Facture::count(),
+            'en_attente' => Facture::where('statut', 'en_attente')->count(),
+            'paye' => Facture::where('statut', 'paye')->count(),
+            'montant_total' => Facture::where('statut', 'paye')->sum('montant_total'), // 👈 Clé corrigée ici !
+        ];
+
+        return view('receptionniste.factures.index', compact('factures', 'stats', 'statut'));
     }
 
     /**
-     * Afficher une facture
+     * Afficher le détail d'une facture
      */
     public function show(Facture $facture): View
     {
@@ -39,17 +53,14 @@ class FactureController extends Controller
      */
     public function genererDepuisDevis(Devis $devi): RedirectResponse
     {
-        // 🛡️ SÉCURITÉ : Bloquer si le devis n'est pas encore validé par le client !
         if ($devi->statut !== 'valide') {
             return back()->with('error', 'Impossible de générer la facture : le devis doit d\'abord être validé par le client.');
         }
 
-        // Si déjà facturé
         if ($devi->facture) {
             return back()->with('error', 'Une facture existe déjà pour ce devis.');
         }
 
-        // Création de la facture
         $facture = Facture::create([
             'devis_id' => $devi->id,
             'numero' => 'FAC-' . date('Ym') . '-' . sprintf('%04d', Facture::count() + 1),
@@ -58,10 +69,8 @@ class FactureController extends Controller
             'statut' => 'en_attente',
         ]);
 
-        // Mise à jour du devis
         $devi->update(['statut' => 'facture']);
 
-        // Notifier le client
         NotificationService::envoyer(
             $devi->intervention->vehicule->client,
             'Facture disponible 💰',
@@ -75,7 +84,7 @@ class FactureController extends Controller
     }
 
     /**
-     * Enregistrer le paiement de la facture
+     * Enregistrer le paiement d'une facture
      */
     public function enregistrerPaiement(Request $request, Facture $facture): RedirectResponse
     {
@@ -88,7 +97,6 @@ class FactureController extends Controller
             'mode_payement' => $request->mode_payement,
         ]);
 
-        // Notifier le client
         NotificationService::envoyer(
             $facture->devis->intervention->vehicule->client,
             'Paiement confirmé ✅',
