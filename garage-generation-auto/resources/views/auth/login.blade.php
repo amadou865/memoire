@@ -2,61 +2,80 @@
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
-    <form method="POST" action="{{ route('login') }}">
+    <div class="mb-6 text-center">
+        <h1 class="text-2xl font-bold text-primary">Connexion</h1>
+        <p class="text-sm text-gray-500 mt-1">Accédez à votre espace Génération Automobile</p>
+    </div>
+
+    <form method="POST" action="{{ route('login') }}" class="space-y-5">
         @csrf
 
-        {{-- Permet de garder en mémoire l'URL du rendez-vous choisi --}}
         @if(request('redirect'))
             <input type="hidden" name="redirect" value="{{ request('redirect') }}">
         @endif
 
-        <!-- Email Address -->
+        <!-- Email -->
         <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
+            <x-input-label for="email" value="Email" class="text-primary font-semibold" />
+            <x-text-input id="email"
+                          class="block mt-1 w-full rounded-lg border-gray-300 focus:border-accent focus:ring-accent"
+                          type="email"
+                          name="email"
+                          :value="old('email')"
+                          required
+                          autofocus
+                          autocomplete="username"
+                          placeholder="ex: client@garage.sn" />
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Mot de passe')" />
-
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="current-password" />
-
+        <!-- Mot de passe -->
+        <div>
+            <x-input-label for="password" value="Mot de passe" class="text-primary font-semibold" />
+            <x-text-input id="password"
+                          class="block mt-1 w-full rounded-lg border-gray-300 focus:border-accent focus:ring-accent"
+                          type="password"
+                          name="password"
+                          required
+                          autocomplete="current-password"
+                          placeholder="••••••••" />
             <x-input-error :messages="$errors->get('password')" class="mt-2" />
         </div>
 
-        <!-- Remember Me -->
-        <div class="block mt-4">
+        <!-- Se souvenir -->
+        <div class="flex items-center justify-between">
             <label for="remember_me" class="inline-flex items-center">
-                <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="remember">
-                <span class="ms-2 text-sm text-gray-600">{{ __('Se souvenir de moi') }}</span>
+                <input id="remember_me"
+                       type="checkbox"
+                       class="rounded border-gray-300 text-accent shadow-sm focus:ring-accent"
+                       name="remember">
+                <span class="ms-2 text-sm text-gray-600">Se souvenir de moi</span>
             </label>
-        </div>
 
-        <div class="flex items-center justify-between mt-6">
             @if (Route::has('password.request'))
-                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
-                    {{ __('Mot de passe oublié ?') }}
+                <a class="text-sm text-accent hover:underline font-medium"
+                   href="{{ route('password.request') }}">
+                    Mot de passe oublié ?
                 </a>
             @endif
-
-            <x-primary-button class="ms-3">
-                {{ __('Se connecter') }}
-            </x-primary-button>
         </div>
 
-        {{-- Lien vers Inscription si pas encore de compte --}}
-        <div class="mt-8 pt-6 border-t border-gray-100 text-center">
-            <p class="text-sm text-gray-600">
-                Vous n'avez pas encore de compte ?
-            </p>
-            <a href="{{ route('register', request()->only('redirect')) }}" class="inline-block mt-2 font-bold text-accent hover:underline text-sm">
-                Créer un compte pour prendre RDV →
-            </a>
+        <!-- Bouton -->
+        <div>
+            <button type="submit"
+                    class="w-full py-3 px-4 bg-primary hover:bg-primary-light text-white font-bold rounded-xl shadow-md shadow-primary/20 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2">
+                Se connecter
+            </button>
         </div>
     </form>
+
+    <div class="mt-8 pt-6 border-t border-gray-100 text-center">
+        <p class="text-sm text-gray-600">
+            Vous n'avez pas encore de compte ?
+        </p>
+        <a href="{{ route('register', request()->only('redirect')) }}"
+           class="inline-block mt-2 text-accent font-bold hover:underline text-sm">
+            Créer un compte pour prendre RDV →
+        </a>
+    </div>
 </x-guest-layout>

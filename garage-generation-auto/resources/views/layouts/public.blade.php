@@ -7,30 +7,31 @@
 
     <title>@yield('title', 'Génération Automobile') - Garage à Dakar</title>
 
-    {{-- Meta description --}}
     <meta name="description" content="Génération Automobile - Garage multiservice à Dakar. Mécanique, électricité, tôlerie, peinture, climatisation.">
 
-    {{-- Favicon --}}
     <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
-    {{-- Fonts --}}
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-    {{-- Vite CSS + JS --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="min-h-screen flex flex-col bg-gray-50 font-sans antialiased">
 
-    {{-- Navbar publique --}}
-    @include('partials.navbar-public')
+    {{-- 🎯 Navbar selon connexion --}}
+    @auth
+        {{-- Client / Staff connecté : liens + nom + cloche (PAS de bouton Connexion) --}}
+        @include('partials.navbar-auth')
+    @else
+        {{-- Visiteur : Accueil, Services, Créneaux, Connexion --}}
+        @include('partials.navbar-public')
+    @endauth
 
-    {{-- Contenu principal --}}
     <main class="flex-grow">
         @yield('content')
     </main>
 
-    {{-- Footer --}}
     @include('partials.footer')
 
 </body>
